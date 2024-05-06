@@ -18,21 +18,13 @@ export default function AboutPage({ setPage }) {
           </section>
           <section className='flex flex-col gap-5'>
             <h2 className='border-b-2 border-orange-400 text-center mx-auto w-fit font-bold'>Our Goals</h2>
-            <ul>
-              <Reveal><li>🎈<p>To build a community wise-driven avenue for techies</p></li></Reveal>
-              <Reveal><li>🎈<p>To create problem-solving solutions through thoughtful projects</p></li></Reveal>
-              <Reveal><li>🎈<p>To host trainings and tech talks for interested aspirants.</p></li></Reveal>
-              <Reveal><li>🎈<p>To participate in challenges that builds up our growth.</p></li></Reveal>
-              <Reveal><li>🎈<p>To expand into a stranger community of techies.</p></li></Reveal>
+            <ul className="p-4">
+              <Reveal><li className='list-disc'><p>To build a community wise-driven avenue for techies</p></li></Reveal>
+              <Reveal><li className='list-disc'><p>To create problem-solving solutions through thoughtful projects</p></li></Reveal>
+              <Reveal><li className='list-disc'><p>To host trainings and tech talks for interested aspirants.</p></li></Reveal>
+              <Reveal><li className='list-disc'><p>To participate in challenges that builds up our growth.</p></li></Reveal>
+              <Reveal><li className='list-disc'><p>To expand into a stranger community of techies.</p></li></Reveal>
             </ul>
-          </section>
-          <section className='flex flex-col gap-5'>
-            <h2 className='border-b-2 border-orange-400 mx-auto w-fit font-bold'>Our Motto</h2>
-            <q className='mx-auto'>Reeling in tech innovation, one step at a time</q>
-          </section>
-          <section className='flex flex-col gap-5'>
-            <h2 className='border-b-2 border-orange-400 mx-auto w-fit font-bold'>Our Logo</h2>
-            <Reveal><img src="lgo.png" alt="Code Reelers logo" className='w-full mx-auto md:w-1/2'/></Reveal>            
           </section>
           <span className="text-orange-900 font-semibold text-center cursor-pointer text-xs md:text-sm"><a href="#about" className={'hover:text-black hover:border-b-2 hover:border-orange-400'}>Go back to top</a></span>
         </div>
