@@ -1,6 +1,10 @@
 import React, { useState } from 'react';
 import { Reveal } from './Reveal';
 import Modal from './Modal';
+import { v4 as uuid} from 'uuid';
+import { getDownloadURL, ref, uploadBytesResumable } from 'firebase/storage';
+import { doc, setDoc } from 'firebase/firestore';
+import { db, store } from '../api/firebase';
 
 export default function Form({ setFormShow }) {
     const [ bioData, setBioData ] = useState({});
@@ -23,11 +27,33 @@ export default function Form({ setFormShow }) {
         return Object.keys(errors).length === 0;
       }
       
-      const handleSubmit = (e) => {
+      const handleSubmit = async(e) => {
         e.preventDefault();
         if(validate()){
-            console.log(bioData);
-            setModal(true);
+            try{
+                const imagesRef = ref(store,`Reeler/${uuid()}`);
+                const uploadTask = uploadBytesResumable(imagesRef,bioData.image)
+                uploadTask.on(
+                  (err) => {
+                      console.log(err);
+                  },
+                  ()=>{
+                      getDownloadURL(uploadTask.snapshot.ref).then(async(imageURL)=>{
+                          await setDoc(doc(db, "reelers-members", uuid()), {
+                            mid:uuid(),
+                            email: bioData.email,
+                            name: bioData.name,
+                            phone: bioData.phone,
+                            role: bioData.role,
+                            level: bioData.level,
+                            image: imageURL});
+                          });
+                      })
+                    setModal(true);
+            }catch(err){
+                console.log(err);
+                alert('an error occured while uploading');
+            }
         }
       };
 
