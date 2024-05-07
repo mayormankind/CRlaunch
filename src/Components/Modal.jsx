@@ -1,8 +1,9 @@
 import React from 'react'
 import { Reveal } from './Reveal';
 import Cofetti from './Cofetti';
+import successSound from '/song.mp3';
 
-export default function Modal({ setModal, setFormShow, name, setBioData }) {
+export default function Modal({ setModal, setFormShow, name, setBioData, success }) {
 
     const handleCancel = () =>{
         setModal(false);
@@ -13,6 +14,10 @@ export default function Modal({ setModal, setFormShow, name, setBioData }) {
   return (
     <div className='h-screen fixed top-0 bottom-0 left-0 right-0 bg-opacity-80 bg-black flex z-50 overflow-y-scroll'>
         <Cofetti/>
+        <audio autoPlay={success ? true : false} className='hidden'>
+            <source src={successSound} type="audio/mpeg" />
+            Your browser does not support the audio element.
+        </audio>
         <div className='w-full m-auto max-w-md'>
             <Reveal>
                 <div className=" relative flex flex-col p-5 bg-white z-10 gap-5 rounded-lg">

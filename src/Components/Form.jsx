@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Reveal } from './Reveal';
 import Modal from './Modal';
 import { v4 as uuid} from 'uuid';
@@ -11,6 +11,7 @@ export default function Form({ setFormShow }) {
     const [ error, setError ] = useState({});
     const [ modal, setModal ] = useState(false);
     const [ count, setCount ] = useState(0);
+    const [success, setSuccess ] = useState(false);
 
     const validate = ()=>{
         let errors = {}
@@ -30,6 +31,12 @@ export default function Form({ setFormShow }) {
       const handleSubmit = async(e) => {
         e.preventDefault();
         if(validate()){
+
+            const storedEmail = localStorage.getItem('submittedEmail');
+            if (storedEmail === bioData.email) {
+                alert('You have already submitted the form with this email before.');
+                return;
+            }
             try{
                 const imagesRef = ref(store,`Reeler/${uuid()}`);
                 const uploadTask = uploadBytesResumable(imagesRef,bioData.image)
@@ -49,7 +56,10 @@ export default function Form({ setFormShow }) {
                             image: imageURL});
                           });
                       })
+                    // Save email to localStorage
+                    localStorage.setItem('submittedEmail', bioData.email);
                     setModal(true);
+                    setSuccess(true);
             }catch(err){
                 console.log(err);
                 alert('an error occured while uploading');
@@ -76,7 +86,7 @@ export default function Form({ setFormShow }) {
                         {error.email ? <p className='text-red-600'>{error.email}</p> : null}
                         <input type="tel" name="" id="" placeholder='Your phone number' className='p-2' onChange={(e)=>setBioData({...bioData,phone:e.target.value})} value={bioData ? bioData.phone : ''}/>
                         {error.phone ? <p className='text-red-600'>{error.phone}</p> : null}
-                        <select name="" id="" className='p-2' onChange={(e)=>setBioData({...bioData,role:e.target.value})} value={bioData ? bioData.role : ''}>
+                        <select name="role" id="" className='p-2' onChange={(e)=>setBioData({...bioData,role:e.target.value})} value={bioData ? bioData.role : ''}>
                             <option>Select role</option>
                             <option value="Developer">Developer</option>
                             <option value="Data Analyst">Data Analyst</option>
@@ -87,11 +97,11 @@ export default function Form({ setFormShow }) {
                             <option value="others">Others</option>
                         </select>
                         {error.role ? <p className='text-red-600'>{error.role}</p> : null}
-                        <select name="" id="" className='p-2' onChange={(e)=>setBioData({...bioData,level:e.target.value})} value={bioData ? bioData.level : ''}>
-                            <option>Skill level</option>
+                        <select name="level" id="" className='p-2' onChange={(e)=>setBioData({...bioData,level:e.target.value})} value={bioData ? bioData.level : ''}>
+                            {/* <option>Skill level</option> */}
                             <option value="Beginner">Beginner</option>
                             <option value="Intermediate">Intermediate</option>
-                            <option value="Expert">God mode</option>
+                            <option value="Expert">Expert</option>
                         </select>
                         {error.level ? <p className='text-red-600'>{error.level}</p> : null}
                         <label htmlFor="image" className='text-white border-2 p-2 w-full bg-transparent hover:border-l-sky-100 rounded-lg text-sm cursor-pointer text-center'>Select an image
@@ -103,7 +113,7 @@ export default function Form({ setFormShow }) {
                 </Reveal>
             </section>
         </div>
-        {modal && <Modal setModal={setModal} setFormShow={setFormShow} name={bioData.name} setBioData={setBioData}/>}
+        {modal && <Modal setModal={setModal} setFormShow={setFormShow} name={bioData.name} success={success} setBioData={setBioData}/>}
     </div>
   )
 }
